@@ -1,0 +1,15 @@
+Site_Name,Camera,Grouse,Rabbit,Rattlesnake,Falcon
+Alpha,1,2,2,2,2
+Alpha,2,3,5,2,1
+Alpha,3,6,4,0,0
+Alpha,4,4,7,3,3
+Beta,1,6,2,2,1
+Beta,2,8,0,3,0
+Beta,3,444444,444444,444444,444444
+Beta,4,5,1,1,1
+Gamma,1,5,1,3,1
+Gamma,2,6,1,1,0
+Gamma,3,8,0,0,0
+Epsilon,1,1,1,1,5
+Epsilon,2,0,2,1,6
+Epsilon,3,,,,
