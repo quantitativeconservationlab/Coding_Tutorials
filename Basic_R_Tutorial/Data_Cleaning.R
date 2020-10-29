@@ -157,50 +157,50 @@ str( CountMatrix )
 ## Optional: 
 ## There are many different ways to accomplish tasks in R.  
 ## Converting variable classes in this example was straightforward due to the small number 
-# of variables in the data frame.
+## of variables in the data frame.
 ## The following is an example of an alternate method to convert all animal columns to numeric.
-# If you were working on a camera trap study - this could be the first season of data. 
-# You can imagine that next season you may get additional animals not detected on this one.
-# Thus, we need a way to automatically select all columns that are animal counts even 
-# though we don't know what those may be next season. 
+## If you were working on a camera trap study - this could be the first season of data. 
+## You can imagine that next season you may get additional animals not detected on this one.
+## Thus, we need a way to automatically select all columns that are animal counts even 
+## though we don't know what those may be next season. 
 
 ## Remind yourself what the columns are in your data frame
 colnames( CountMatrix )
-# What do we do? One option is selecting everything that is not "Site_Name" or "Camera".
-# Those columns will remain consistent throughout your study meaning that your code won't 
-# break even if you update your data later! 
+## What do we do? One option is selecting everything that is not "Site_Name" or "Camera".
+## Those columns will remain consistent throughout your study meaning that your code won't 
+## break even if you update your data later! 
 
-# How do we select everything that is not those two columns?
-# "!" is the equivalent of opposite.
-# %in% is a function that selects everything in your first argument that matches your second,
-# so let's select the column names that are NOT animal counts.
+## How do we select everything that is not those two columns?
+## "!" is the equivalent of opposite.
+## %in% is a function that selects everything in your first argument that matches your second,
+## so let's select the column names that are NOT animal counts.
 colnames( CountMatrix ) %in% c("Site_Name", "Camera")
-# This gives you a logical vector that assigns as TRUE those that match your second argument
-# and FALSE as those that don't. Remember your second argument is the Site_Name and Camera columns.
-# Now add the ! function at the start of your argument to reverse this.
+## This gives you a logical vector that assigns as TRUE those that match your second argument
+## and FALSE as those that don't. Remember your second argument is the Site_Name and Camera columns.
+## Now add the ! function at the start of your argument to reverse this.
 !( colnames( CountMatrix ) %in% c("Site_Name", "Camera") )
-# Now that you know it works, assign it as a vector object.
+## Now that you know it works, assign it as a vector object.
 animal_names <- !( colnames( CountMatrix ) %in% c("Site_Name", "Camera") )
 
-# You can now use this logical vector to easily select the columns that you want to modify in
-# your data frame.
-# Let's check that it works by calling those columns and the first 3 rows using "indexing".
-# Indexing of an object is performed using square brackets "[]".
+## You can now use this logical vector to easily select the columns that you want to modify in
+## your data frame.
+## Let's check that it works by calling those columns and the first 3 rows using "indexing".
+## Indexing of an object is performed using square brackets "[]".
 CountMatrix[ 1:3, animal_names ]
-# BUT if I could just use numbers to select rows, why didn't I use numbers to select columns?
-# Check that it works:
+## BUT if I could just use numbers to select rows, why didn't I use numbers to select columns?
+## Check that it works:
 CountMatrix[ 1:3, 1:2 ]
-# The problem is that this code relies entirely on your columns never changing their order.
-# Otherwise you will accidentally call the wrong column and not know it. 
-# For example, if you add a column to your data because you were adding a unique 
-# identifier, or decided there was other attributes you needed (eg. GPS locations ), 
-# your column orders will change.
-# We therefore advise against using indexing to modify objects (it is ok to use to view data).
+## The problem is that this code relies entirely on your columns never changing their order.
+## Otherwise you will accidentally call the wrong column and not know it. 
+## For example, if you add a column to your data because you were adding a unique 
+## identifier, or decided there was other attributes you needed (eg. GPS locations ), 
+## your column orders will change.
+## We therefore advise against using indexing to modify objects (it is ok to use to view data).
 
-# Use your logical vector to select your desired columns. Note the row selection (left side of ,)
-# is left blank meaning that you select all the rows.
-# Use the lapply() function in tandem with the as.numeric() function to convert all desired 
-# columns to numeric at the same time.
+## Use your logical vector to select your desired columns. Note the row selection (left side of ,)
+## is left blank meaning that you select all the rows.
+## Use the lapply() function in tandem with the as.numeric() function to convert all desired 
+## columns to numeric at the same time.
 CountMatrix[ , animal_names ] <- lapply( CountMatrix[ , animal_names], as.numeric )
 
 ## Double-check that variables are now assigned to the correct class. 
