@@ -1,7 +1,7 @@
 ---
 title: "GitHub_Tutorial"
 author: "Jonas Frankel-Bricker"
-date: "10/12/20"
+date: "10/30/20"
 output:
   pdf_document:
     toc: yes
@@ -35,6 +35,12 @@ The following tutorial is presented as an introduction to using GitHub in combin
 5. Transfer information between platforms
 
 6. Manage the online repository
+
+# Install "Git" on your computer
+If you are working on a Mac, your computer likely already has the Git program installed in the Path "/usr/local/git" or "/usr/bin/git".  However, Windows-based systems do not come with Git.  To install Git follow the instructions for your operating system provided at the URL: 
+https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+For Windows users, open the downloaded install file and accept all of the default options.  **Keep track of the Path where git.exe will be installed.  For most Windows users, this will be "C:/Program Files/Git/bin/git.exe".**
+
 
 # Set up a GitHub account
 Prior to working through this tutorial, you'll need to sign up for a GitHub account.
@@ -95,13 +101,14 @@ This section focuses on the basic methods used to connect online repositories wi
 2. Set up version control with Git 
   - Click on the "Tools" tab at the top of screen
   - Select "Global Options" from the dropdown menu
-  - Select the "Git/SVN" tab at the left side of the window and click the "Enable version control for RStudio projects" box
+  - Select the "Git/SVN" tab at the left side of the window and click the "Enable version control for RStudio projects" box.  *You may need to provide the Path to the "Git executable".  If this is the case, click the "Browse" button and navigate to the Path where git.exe is located on your computer.*
+ - Click the "Apply" button (follow the prompt to restart the R session)
  
 3. Link GitHub with the R Project
   - Click on the "Tools" tab at the top of screen
   - Select "Project Options" from the dropdown menu
   - Select the "Git/SVN" tab at the left side of the window and click "Git" from the "Version control system:" dropdown menu
-  - Click apply at the bottom of the window
+  - Click apply at the bottom of the window (follow the prompts to restart the R session)
   
 4. Link the repository's URL with the R Project
   - Click on the "Tools" tab at the top of screen
