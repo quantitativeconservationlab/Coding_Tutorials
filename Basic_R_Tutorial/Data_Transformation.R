@@ -21,6 +21,7 @@
 # Load your workspace from Part 1.
 # This will reload all objects created in your previously saved workspace. 
 load("Workspaces/Data_Cleaning_Workspace.RData" )
+
 # Alternatively, you could import the cleaned data using the read.csv() function, however, 
 # you may need to reassign variable classes.
 
@@ -28,6 +29,7 @@ load("Workspaces/Data_Cleaning_Workspace.RData" )
 library( tidyverse )
 library( reshape2 )
 library( dplyr )
+
 
 # Working with data in Wide format ------------------------------------------------
 
@@ -37,7 +39,7 @@ library( dplyr )
 # animal count data, but are separated into different columns.
 # There are pros and cons to working with Wide format data.
 # Specifically, Wide format allows for the straightforward creation of additional 
-# variables that summarrize rows of data.
+# variables that summarize rows of data.
 # Further, initial assessments of data values (such the summary() function you used 
 # in Part 1) can perform well on Wide format data.
 
@@ -49,33 +51,38 @@ CountMatrix_Clean$Total_Counts <- CountMatrix_Clean$Grouse + CountMatrix_Clean$R
 
 # But if you have multiple animal species you can see how this quickly becomes unmanageable 
 # what happens if you get different species on your second season of field work? 
-# your code will no longer work!
+# Your code will no longer work!
+
 ### OR ###
-## you could use the rowSums() function to sum the rows of the animal columns.
-# remember from the cleaning script that you could exclude your id columns 
-# using a combination of ! and %in%. 
-# you could either call the rowSums() function excluding those columns:
+
+## You could use the rowSums() function to sum the rows of the animal columns.
+# Remember from the cleaning script that you could exclude your id columns 
+# using a combination of ! and %in%.
+
+# You could call the rowSums() function excluding those columns:
 rowSums( CountMatrix_Clean[ , !( colnames( CountMatrix_Clean ) %in% c("Site_Name", "Camera", "Camera_ID") ) ] )
 # Remember, the "!" symbol means opposite.  This line tells R to sum all the values of 
 # columns that aren't named "Site_Name", "Camera", or "Camera_ID" for each row.
 
-# OR you could use %>% 'piping'. #
-# See here: https://www.datacamp.com/community/tutorials/pipe-r-tutorial for more details #
-# Piping is a really good way to run multiple steps in one go. You can also combine it 
-# with ggplot, which allows you to modify your data for plotting without having to save #
-# intermediate steps. 
-# Here we want to use the function select to choose everything outside #
-# the id columns and then we want to sum the remaining columns. Notice that each 
-# action is separated by the %>%:
-CountMatrix_Clean %>% dplyr::select( -Site_Name, -Camera, -Camera_ID ) %>%
-              rowSums()
-#After testing that it works you can then create the new variable called Total_Counts
-#let's break this down into separate lines so that you can see how each works:
-CountMatrix_Clean[ , "Total_Counts"] <- CountMatrix_Clean %>% #here we are saving our changes to the object
-  dplyr::select( -Site_Name, -Camera, -Camera_ID ) %>% #we now select the columns we want exclude
-  rowSums()  # we now sum rows
+### OR ###
 
-# did it work?
+# You could use %>% 'piping'. 
+# See here: https://www.datacamp.com/community/tutorials/pipe-r-tutorial for more details. 
+# Piping is a really good way to run multiple steps in one go. 
+# You can also combine it with ggplot, which allows you to modify your data for plotting 
+# without having to save intermediate steps.
+
+# Here we want to use the function select() to choose everything outside the ID 
+# columns and then sum the remaining columns. Notice that each action is separated by the %>%:
+CountMatrix_Clean %>% dplyr::select( -Site_Name, -Camera, -Camera_ID ) %>% rowSums()
+
+# After testing that it works you can then create the new variable called Total_Counts.
+# Let's break this down into separate lines so that you can see how each works:
+CountMatrix_Clean[ , "Total_Counts"] <- CountMatrix_Clean %>% # Here we are saving our changes to the object.
+  dplyr::select( -Site_Name, -Camera, -Camera_ID ) %>% # We now select the columns we want exclude.
+  rowSums()  # We now sum the rows.
+
+# Did it work?
 head( CountMatrix_Clean )
 
 # Generally speaking, most experimental data are complemented by "metadata". 
@@ -84,10 +91,13 @@ head( CountMatrix_Clean )
 # Example metadata are provided as a .csv file in the "Data" directory named "Metadata".
 # These data contain additional information for each Camera_ID, specifically, the 
 # lab member that deployed the camera and the date each was deployed.
+
 # Import the metadata file into the R environment and view the metadata.
 Metadata <- read.csv( "Data/Metadata.csv", fileEncoding = "UTF-8-BOM" )
-# view
+
+# View
 head( Metadata )
+
 # It is often beneficial to merge metadata with experimental data to coalesce all 
 # information into a single data object.
 # In order to merge two (or more) data sets, at least one variable must be shared.
@@ -95,12 +105,13 @@ head( Metadata )
 
 # Combine "CountMatrix_Clean" with "Metadata" by the shared "Camera_ID" variable into 
 # a new data object "CountMatrix_Combined" using the left_join() function.
-#sometimes left_join can create extra or less rows, make sure you understand how it works
+# Sometimes left_join() can create extra or less rows, make sure you understand how it works
 # and check that you are getting the desired result 
-# check out the data-wrangling-cheatsheet for more info:
+# Check out the data-wrangling-cheatsheet for more info:
 # https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf 
 CountMatrix_Combined <- dplyr::left_join(CountMatrix_Clean, Metadata, by = "Camera_ID")
-# did it work?
+
+# Did it work?
 head( CountMatrix_Combined ) 
 # Note how the information associated with each "Camera_ID" in "Metadata" have been 
 # added to the right side of "CountMatrix_Clean".
@@ -125,23 +136,23 @@ dim( CountMatrix_Clean); dim( CountMatrix_Combined )
 
 # Here we use the melt() function to combine species count into a single column.
 # melt() is part of the reshape2 package. 
-# Alternatively, check out the cheatsheet for plyr package alternatives
-# In melt, the variables that are not be condensed are designated with the id.vars argument, 
-# whth the remaining variables, not listed, condensed into a single column.
-# The variable.name argument defines the new column name 
+# Alternatively, check out the cheatsheet for plyr package alternatives.
+# In melt(), the variables that are not to be condensed are designated with the id.vars argument, 
+# with the remaining variables, not listed, condensed into a single column.
+# The variable.name argument defines the new column name, 
 # while the value.name argument defines the new column name for the values 
 # from the condensed columns.
 CountMatrix_Combined_Melt <- reshape2::melt( CountMatrix_Combined, 
             id.vars = c( "Site_Name", "Camera", "Camera_ID", 
                     "Lab_Member", "Date", "Total_Counts" ), variable.name = "Animal", 
             value.name = "Animal_Counts" )
-# note how we specify the package. Also note that we often break up the code into multiple lines.
-# that is only so we can read easier. 
+# Note how we specify the package. Also note that we often break up the code into multiple lines.
+# That is only so we can read easier. 
 
-# Now how we view the newly created data object.
+# View the newly created data object.
 head( CountMatrix_Combined_Melt )
 # How is the data structure different in Long vs Wide format?
-# how are total counts different from animal counts?
+# How are total counts different from animal counts?
 
 # Importantly, new variables have been created whereas others have been removed 
 # during the transformation process.
@@ -155,14 +166,15 @@ CountMatrix_Combined_Melt$Animal <- as.character( CountMatrix_Combined_Melt$Anim
 # you just performed (i.e., going from wide to long format).
 # Each row in your new data frame contains a single Animal_Count measurement.
 # This means that each "Camera_ID" now has 4 unique rows with a count value for each of 
-# the 4 animals (intead of the original 1 row per camera id).
+# the 4 animals (instead of the original 1 row per Camera_Id).
 # Thus, the values of each variable in the id.vars argument are now 
 # repeated 4 times.
-# This ensures that all information contained in the Wide format data is still provided 
+# This ensures that all information contained in the Wide format data are still provided 
 # for each row of the Long format data (which now has many more rows).
 
-#how do we work out how many rows in the long vs wide format?
+# How do we work out how many rows in the long vs wide format?
 dim( CountMatrix_Combined_Melt ); dim(CountMatrix_Combined )
+
 
 # Working with data in Long format ------------------------------------------------
 
@@ -171,37 +183,43 @@ dim( CountMatrix_Combined_Melt ); dim(CountMatrix_Combined )
 
 # For example, say we want to add the scientific name for each animal as a new variable.
 # (Sage-Grouse (Centrocerus urophasianus), Rabbit (Brachylagus idahoensis), 
-# Rattlesnake (Crotalus oreganus), Falcon (Falco peregrinus))
+# Rattlesnake (Crotalus oreganus), Falcon (Falco peregrinus)).
 
-# We would normally import a dataframe with scientific names and join it to ours.
-# or we could code it manually. We start by working out how many species we need common names for 
+# We would normally import a data frame with scientific names and join it to ours.
+# Or, we could code it manually. 
+# We start by working out how many species we need common names for. 
 scinames <- data.frame( Animal = unique( CountMatrix_Combined_Melt$Animal ), 
-          # we also create a column with missing values to add scientific names to 
+          # We also create a column with missing values to add scientific names to. 
           Scientific_Name = rep( NA, length( unique( CountMatrix_Combined_Melt$Animal)) ))
-# check 
+# Check 
 scinames
-# now replace with correct scientific names in the correct order:
+
+# Now replace with correct scientific names in the correct order:
 scinames$Scientific_Name <- c( "Centrocerus urophasianus", "Brachylagus idahoensis", 
                           "Crotalus oreganus", "Falco peregrinus" )
-# check again
+# Check again
 scinames
 
-# You can now join your name dataframe to your long format dataframe
-# we start by checking dimensions of original:
+# You can now join your name data frame to your long format data frame.
+# We start by checking dimensions of original:
 dim( CountMatrix_Combined_Melt )
-#now we join
-CountMatrix_Combined_Melt <- left_join( CountMatrix_Combined_Melt, scinames, by = "Animal" )
-#check that it worked
-head( CountMatrix_Combined_Melt ); dim( CountMatrix_Combined_Melt )
-# can you see how we expect the outcome to be the same number of rows as CountMatrix_Combined_Melt?    
 
-# Add a new variable for the relative observed occupancy (assuming perfect detection) of each animal observed out of 
-# the total counts from each "Camera_ID".
+# Now we join.
+CountMatrix_Combined_Melt <- left_join( CountMatrix_Combined_Melt, scinames, by = "Animal" )
+
+# Check that it worked.
+head( CountMatrix_Combined_Melt ); dim( CountMatrix_Combined_Melt )
+# Can you see how we expect the outcome to be the same number of rows as CountMatrix_Combined_Melt?    
+
+# Add a new variable for the relative observed occupancy (assuming perfect detection) 
+# of each animal observed out of the total counts from each "Camera_ID".
 CountMatrix_Combined_Melt$Relative_Occupancy <- CountMatrix_Combined_Melt$Animal_Counts / CountMatrix_Combined_Melt$Total_Counts
-# did it work?
+
+# Did it work?
 head( CountMatrix_Combined_Melt)
 
-########## Now save everything you need in this final section ------------------------------
+
+########## Save everything you need  ------------------------------
 
 # Save the wide data frame as a .csv file.
 write.csv(CountMatrix_Combined, "Data/CountMatrix_Combined.csv", row.names = FALSE)
@@ -211,6 +229,7 @@ write.csv(CountMatrix_Combined_Melt, "Data/CountMatrix_Combined_Melt.csv", row.n
 
 # Save your workspace.
 save.image( "Workspaces/Data_Transformation_Workspace.RData" )
+
 
 ##### -------------------------------------------------------------------------------
 
