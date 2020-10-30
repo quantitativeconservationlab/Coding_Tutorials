@@ -97,7 +97,8 @@ head( Metadata )
 # a new data object "CountMatrix_Combined" using the left_join() function.
 #sometimes left_join can create extra or less rows, make sure you understand how it works
 # and check that you are getting the desired result 
-# check out the data-wrangling-cheatsheet in the repository for more info.
+# check out the data-wrangling-cheatsheet for more info:
+# https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf 
 CountMatrix_Combined <- dplyr::left_join(CountMatrix_Clean, Metadata, by = "Camera_ID")
 # did it work?
 head( CountMatrix_Combined ) 
