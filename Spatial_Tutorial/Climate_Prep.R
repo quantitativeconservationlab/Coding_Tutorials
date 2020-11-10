@@ -2,52 +2,55 @@
 # This tutorial was created by Jen Cruz and modified in collaboration with 
 # Jonas Frankel-Bricker. 
 #
-# The distribution of hermit thrush during the breeding season in Wisconsin #
-# may be driven by climate. For our analysis we explore whether rainfall and temperature #
-# during the breeding season of hermit thrush influence its distribution. 
-#
-# We use PRISM database to obtain national climate data for the lower 48 states
+# The distribution of hermit thrush during the breeding season in Wisconsin 
+# may be driven by climate. 
+# For our analysis we explore whether rainfall and temperature during the 
+# breeding season of hermit thrush influence its distribution. 
+# We use the PRISM database to obtain national climate data for the lower 48 states
 # of the USA across 30 years at a resolution of 800m.
-# We need to reduce the national dataset to Wisconsin.
+# We need to reduce the national data set to solely include data from Wisconsin.
 # We use minimum temperature and rainfall during the Hermit Thrush breeding season (June - July).
-#
 # We work primarily with "raster" class objects.
 # Please see the following link for more information on raster data: 
 # https://geocompr.robinlovelace.net/spatial-class.html#raster-data
-#
 #################################################################################
+
 # Initial preparation (do this everytime you start a new script) ######################
 
 # Clear your work space and release your computer's memory.
 rm( list = ls() )
 gc()
 
-# Install the required packages.# remember this is only done once. 
+# Install the required packages.
+# Remember this is only done once. 
 install.packages( "prism" ) # Extracts climate data from PRISM
 install.packages( "rasterVis" )
 install.packages( "latticeExtra" ) # for visualizing
 
-# Load relevant packages. This is done every time you open Rstudio #
+# Load relevant packages. This is done every time you open Rstudio. 
 library( prism ) #package for downloading prism data
-library( rgdal ) # Imports projects and transforms spatial data. Requires the "sp" package.
 library( raster )
 library( rasterVis ) # Visualizes rasters
 library( latticeExtra )
 
 # Importing data #################################
-# set working directory
-workdir <- paste( getwd(), "/Spatial_Tutorial/", sep = "" )
 
-#set data directory
-datadir <- paste(workdir, "/Data/", sep = "")
+# Create an object containing the working directory's Path. 
+# This may differ depending on your directory structure.
+# What is yours?
+workdir <- getwd()
+
+# Create an object containing your "Data" directory's Path.
+datadir <- paste( workdir, "/Data/", sep = "" )
 
 # Import Wisconsin shapefile to subset our data 
-WI <- rgdal::readOGR( paste( datadir, "Wi_State_Outline/WI_state_outline.shp", sep="" ) )
+WI <- rgdal::readOGR( paste( datadir, "Wi_State_Outline/WI_state_outline.shp", sep= "" ) )
+
 # Make a quick plot.
 plot( WI )
 
-# import our sites spatial points:
-sites <- rgdal::readOGR( paste( datadir, "sites.shp", sep="" ) )
+# Import our "sites" spatial points.
+sites <- rgdal::readOGR( paste( datadir, "sites.shp", sep = "")  )
 
 # Downloading climate data #################################
 
@@ -103,9 +106,9 @@ head( ls_prism_data( absPath = TRUE), 30 )
 # Preparing climate data #################################
 
 # Data are Minimum temperature and precipitation normals for June and July.
-# We need to subset these to  Wisconsin.
-# We prepare temperature and precipitation separately 
-# We then combine data from June and July by calculating mean values, 
+# We need to subset these for only Wisconsin data.
+# We prepare temperature and precipitation separately. 
+# We then combine data from June and July by calculating mean values 
 # and subsetting the processed data.
 
 # Minimum temperature normals:
@@ -124,7 +127,6 @@ MinTAll <- prism_stack( ls_prism_data()[, 1] )
 # Assess the dimensions of the raster stack.
 dim( MinTAll )
 # The output is presented as rows, columns, layers.
-
 str( MinTAll )
 
 # Click on "MinTALL" in the Data pane (or: View (MinTALL) ).
@@ -132,7 +134,7 @@ str( MinTAll )
 # for June and July.
 
 # Use the "raster" package to process raster objects.
-# Convert the coordinate reference system (crs) of the raster object to the same one 
+# Convert the coordinate reference system (CRS) of the raster object to the same one 
 # used with our species data.
 MinTWI <- raster::projectRaster( MinTAll, crs = proj4string( sites ) )
 
@@ -143,7 +145,7 @@ dim( MinTWI )
 # Crop the raster brick to only include Wisconsin location data.
 MinTWI <- raster::crop( MinTWI, WI )
 dim( MinTWI )
-# Note how the dimensions are much smaller.
+# Note how the dimensions are much smaller.  Why is this?
 
 # Calculate the seasonal mean of minimum temperature normals for the breeding season 
 # (Jun-Jul).
@@ -152,7 +154,7 @@ MinT <- stackApply( MinTWI, 1:1, fun = mean )
 # 1:1 assigns the same index to both files so we get the combined seasonal mean.
 # The RasterBrick has been converted to a "RasterLayer" object.
 
-#check
+# Assess the dimensions of the raster layer
 dim(MinT)
 # The object now has only 1 layer.
 
@@ -193,8 +195,8 @@ dim( RainWI )
 
 # Crop the raster brick to only include Wisconsin location data.
 RainWI <- raster::crop( RainWI, WI ) 
-
 dim( RainWI )
+
 # Get seasonal mean of rainfall normals for the breeding season (Jun-Jul):
 Rain <- stackApply( RainWI, 1:1, fun = mean )
 dim( Rain )  
@@ -239,5 +241,8 @@ writeRaster( Rain, filename = paste( datadir, "Rain.tif", sep = "" ),
 write.csv( clim_df, file = paste( datadir, "clim_df.csv", sep="" ), 
           row.names = FALSE )
 
+save.image( "Workspaces/Climate_Prep1.RData" )
+
 # Go to Habitat.Prep.R next. 
+
 ################   END OF SCRIPT      ###########################################
