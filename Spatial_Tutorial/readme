@@ -1,28 +1,50 @@
 Using Species distribution modeling (SDM) to showcase spatial data manipulation. 
+
 SDMs are important for exploring species-habitat associations that guide current and future conservation planning. 
-Despite a recent explosion of analytical techniques, the basics of SDM rely on extrapolating associations between species occurrences and predictors 
-(e.g., land cover, climate) across space and/or time. In this practical class, students will be guided through the steps required for development of 
-species distribution models, and compare alternative methods available in program R. Prior knowledge of R, RStudio and occurrence data required.
+The basics of SDM rely on extrapolating associations between species occurrences and predictors (e.g., land cover, climate) across space and/or time. 
+In this tutorial, students will be guided through the steps required for the development of species distribution models and compare alternative methods available in the R programming language. 
+Prior knowledge of R, RStudio, and occurrence data required.
 
 Surveying species:
-Randomly selected points around Wisconsin were surveyed during the breeding seasons of 2016 and 2017 using point counts to determine species 
-presence/absence. Survey day, hour and observer were also recorded for each point. More details on survey methodology at: 
-http://www.uwgb.edu/birds/wbba/index.htm
+Randomly selected points around Wisconsin were surveyed during the breeding seasons of 2016 and 2017 using point counts to determine species presence/absence. 
+Survey day, hour, and observer were also recorded for each point. 
+More details on survey methodology are available at: http://www.uwgb.edu/birds/wbba/index.htm
 
 Species data
-Hermit thrush: One of the most widely distributed forest-nesting birds of North America. Their population has remained stable in the last 20 years. 
-Breeds in Wisconsin within various coniferous, deciduous, and mixed forest types, with an affinity for conifers in some areas. They inhabit colder 
-and wetter regions of Wisconsin.
+Hermit thrush: 
+One of the most widely distributed forest-nesting birds of North America. 
+Their population has remained stable in the last 20 years. 
+They breed in Wisconsin within various coniferous, deciduous, and mixed forest types, with an affinity for conifers in some areas. 
+They inhabit colder and wetter regions of Wisconsin.
 
-Eastern Meadowlark: Representative of farmland and open country. Most common in native grasslands, prairies, pastures and savannas, but also hay fields, 
-weedy croplands, roadsides, and other open areas. The species has recently declined in numbers owing to land use changes and human encroachment. 
+Eastern Meadowlark: 
+Representative of farmland and open country. 
+Most common in native grasslands, prairies, pastures and savannas, but also hay fields, weedy croplands, roadsides, and other open areas. The species has recently declined in numbers owing to land use changes and human encroachment. 
 Meadowlarks in Wisconsin tend to inhabit the southern warmer parts of the state.
 
 Predictor data
-National Land Cover Dataset: Uses a 16-class land cover classification scheme at a spatial resolution of 30 m to characterize habitat use based 
-primarily on a decision-tree classification of circa 2011 Landsat satellite data. More details at: https://www.mrlc.gov
+National Land Cover Dataset (NLCD): 
+Uses a 16-class land cover classification scheme at a spatial resolution of 30 m to characterize habitat use based 
+primarily on a decision-tree classification of circa 2011 Landsat satellite data. 
+More details are available at: https://www.mrlc.gov
 
-PRISM Weather Data: Uses climate observations from a wide range of monitoring networks, applies sophisticated quality control measures, 
+PRISM Weather Data: 
+Uses climate observations from a wide range of monitoring networks, applies sophisticated quality control measures, 
 and develops spatial climate datasets to reveal short- and long-term patterns at 800 m or 3 km grid cell resolutions. 
 Thirty year normals average values for temperature and precipitation over the preceding 30 years (1981-2010). 
-More details at http://prism.oregonstate.edu/
+More details are available at: http://prism.oregonstate.edu/
+
+The Spatial_Tutorial is composed of 5 sections that should be worked through in the following order:
+1) Species_Prep
+2) Climate_Prep
+3) Habitat_Prep
+4) Data4Analysis
+5) SDM_Analysis
+
+
+
+
+
+
+
+

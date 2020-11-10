@@ -10,65 +10,81 @@
 # of absences rather than those that rely on background points. 
 
 ################################################################################
+
 # Initial preparation (do this everytime you start a new script) ######################
 
 # Clear your work space and release your computer's memory.
-rm(list = ls() ) 
-#set working dir() 
-gc() #releases memory
+rm( list = ls() ) 
+gc()
 
-##### install relevant packages ####
+# Install relevant packages 
 install.packages( "sdm" ) 
 
-####### load relevant packages ###
+# Load relevant packages
 library( tidyverse ) 
-# set option to see all columns and more than 10 rows
+# Set option to see all columns and more than 10 rows
 options( dplyr.width = Inf, dplyr.print_min = 100 )
-library( sdm ) #Species distribution analysis package.
+library( sdm ) # Species distribution analysis package
 # sdm relies on other packages for analysis. Install those associated packages:
 installAll( )
 
-########## end of package loading ###########
 
-######## loading data and defining required objects -------------------------------  
+######## Loading data and defining required objects -------------------------------  
 
-# set working directory
-workdir <- paste( getwd(), "/Spatial_Tutorial/", sep = "" )
-#set data directory
+# Create an object containing the working directory's Path. 
+# This may differ depending on your directory structure.
+# What is yours?
+workdir <- getwd()
+
+# Create an object containing your "Data" directory's Path.
 datadir <- paste(workdir, "/Data/", sep = "")
 
-# Import .csv file containing combined species and predictor data:
-alldata <- read.csv( file = paste( datadir, "/data/alldata.csv", sep="" ) )
+# Import .csv file containing combined species and predictor data.
+alldata <- read.csv( file = paste( datadir, "alldata.csv", sep="" ) )
 
 # View imported data
 head( alldata )
 glimpse( alldata )
 
 ### Setting general vectors: ####
+
 # Total number of sites sampled in presence/absence data:
 M <- max( alldata$id )
-# We want to split our data into our training and testing sets: # 
-# Define number of data points to use for testing:
+
+# We want to split our data into our training and testing sets. 
+# Define number of data points to use for testing.
 TP <- 1000
-# Select which rows to use for testing for our presence/absence data:
+
+# Select which rows to use for testing for our presence/absence data.
 t.parows <- sample( x = 1:M, size = TP, replace = FALSE )
 
 ######## Preparing required response and covariate data for analyses  -------------------
 
-# Predictor data are commonly standardized prior to analysis so that effect sizes are directly #
-# comparable. We want to also keep the original values to aid interpretation of results. #
+# Predictor data are commonly standardized prior to analysis so that effect sizes are directly 
+# comparable. 
+# We want to also keep the original values to aid interpretation of results. 
 
-# Create a dataframe to contain standardize covariates:
+# Create a data frame to contain standardized covariates.
 pa.data <- alldata %>% dplyr::select( -eame ) #remove data for Eastern Meadowlark
-# View
+
+# View the new data frame.
 head( pa.data )
+
 # Define predictor columns that require standardizing:
 covcols <- which( !names( pa.data ) %in% c("id", "x", "y", "heth" ) )
-# Define predictor names
+
+# Define predictor names.
 covnames <- colnames( pa.data )[ covcols ]
-# Check that you selected the right columns
+
+# Check that you selected the right columns.
 head( pa.data[ , covcols ] )
-# Standardize each column
+
+****Jonas continue from here***
+****Jonas continue from here***
+****Jonas continue from here***
+****Jonas continue from here***
+  
+# Standardize each column.
 pa.data[ , covcols ] <- apply( pa.data[ , covcols ], MARGIN = 2, scale )
 # Note that scale standardizes continuous predictors. How do we standardize categorical ones?
 # or binomial ones?
