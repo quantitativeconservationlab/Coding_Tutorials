@@ -4,7 +4,7 @@
 
 # We want to see if habitat type influences the distribution of our species. 
 # We use landcover data from the National Geospatial Data Asset (NGDA).
-# https://www.mrlc.gov/nlcd01_data.php 
+# https://www.mrlc.gov/data/nlcd-2016-land-cover-conus
 # We downloaded data from 2016 directly from the website and extracted them into 
 # a subdirectory in our Data folder called "NLCD_LandCover_2016".
 # We are interested in land cover surrounding our sites only. 
