@@ -230,7 +230,7 @@ head( clim_df ); dim( clim_df )
 ################ save relevant data and workspaces ---------------------------
 
 # Save the cropped raster as a GTiff (.tif) file using the writeRaster() function.
-writeRaster( MinT, filename = paste( datadir, "/MinT.tif", sep = "" ), 
+writeRaster( MinT, filename = paste( datadir, "MinT.tif", sep = "" ), 
              format = "GTiff" )
 
 # Save the cropped raster as a GTiff (.tif) file using the writeRaster() function.
