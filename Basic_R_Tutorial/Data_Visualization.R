@@ -2,7 +2,7 @@
 # This tutorial was created by Jonas Frankel-Bricker and Jen Cruz as Part 3 of the 
 # "Basic_R" tutorial series.  
 # "Data_Visualization.R" will walk you through the basics of constructing and 
-# and customizing data visualization using the package ggplot2.
+# and customizing data visualizations using the package ggplot2.
 ################################################################################
 
 
@@ -48,7 +48,7 @@ CountMatrix_Combined_Melt$Animal_Counts <- as.numeric(CountMatrix_Combined_Melt$
 # Further, input data usually needs to be in long (tidy) format, so that each column
 # contains values for a single variable type.  
 
-# First, it is imperative to understand the core of a line of code in ggplot2.
+# First, it is imperative to understand the foundation of a line of code in ggplot2.
 # MOST plots are created by first using the function ggplot().
 # This function designates the first argument as the data used to source the 
 # variables and values that will be plotted.
@@ -57,24 +57,24 @@ CountMatrix_Combined_Melt$Animal_Counts <- as.numeric(CountMatrix_Combined_Melt$
 
 # Let's begin to construct a plot representing the number of counts for each animal
 # (Animal_Counts).
+ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts) )
 # Notice how the output creates a plot in the "Plots" tab in the bottom right pane.
 # ggplot2 automatically ordered the site names on the x-axis and chose a range of 
 # values for the y-axis.
 # However, no data was plotted using this initial code because we did not choose 
 # which kind of plot should be constructed.
-ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts) )
 # Since this line is the core foundation for ggplot2, it is often save as an object
-# and then built upon with additional plotting parameters.
+# and then built upon with additional plotting functions and parameters.
 animal_boxplot <- ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts) )
 
 # Let's build a box plot (box and whisker) by adding the geom_boxplot() function 
 # to our code.
 # Importantly, subsequent functions in ggplot2 are added using the plus (+) sign, 
-# while functions used in arguments are separated by a comma (,).
+# while arguments are separated with a comma (,).
 animal_boxplot + geom_boxplot()
 # A basic box plot has been constructed.
 # The upper and lower edges of the boxes represent quartiles around the mean, 
-# while bold lines represent median values.
+# while the bold horizontal lines represent median values.
 # Box plots are useful because they provide information on the variation of the data.
 # What experimental questions could be addressed with this visualization?
 # What other information from our data could be added to provide a more informative
@@ -101,31 +101,30 @@ ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = S
 ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
   geom_point()
-# Each point represents the number of counts for each animal from each camera at 
-# each site.
-# However, you can see that the points are not overlapping with their associated 
+# You can see that the points are not overlapping with their associated 
 # box plots.  
-# Most plotting functions have many associated arguments that can modify the output.
+# Most plotting functions have many arguments that can modify the output.
 # One of the most common arguments is "position", which allows for modification of 
 # the orientation in which plots are presented.
 # Here, we define the position of the points using the position_jitterdodge() function.
 ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
-  geom_point(position = position_jitterdodge(jitter.width = 0))
+  geom_point( position = position_jitterdodge(jitter.width = 0) )
 # The points are now aligned correctly.
 # However, not all cameras are visualized, since some of the points overlap 
 # (i.e. different cameras that had the same number of counts for a given animal).
 # You can spread the points by increasing the value of the "jitter.width" argument.
 ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
-  geom_point(position = position_jitterdodge(jitter.width = 0.1))
+  geom_point( position = position_jitterdodge(jitter.width = 0.1) )
 
 # The axes initially provided by ggplot2 often need to be changed.
-# Here, lets make the y-axis range from 0 to 9 with every 3 tick marks represented 
-# by their appropriate number using the scale_y_continuous() function.
+# Here, lets make the y-axis range from 0 to 9 with 4 evenly spaced tick marks 
+# represented by their appropriate value using the scale_y_continuous() function.
 ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
-  geom_point(position = position_jitterdodge(jitter.width = 0.1))
+  geom_point( position = position_jitterdodge(jitter.width = 0.1) ) +
+  scale_y_continuous( limits = c(0, 9), breaks = c(0, 3, 6, 9) )
 # It is often beneficial to add some extra space at the top of the plot to provide 
 # room for statistical annotation or other information.
 
@@ -134,7 +133,7 @@ ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = S
 AnimalCount_Box <- 
   ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
-  geom_point(position = position_jitterdodge(jitter.width = 0.1))
+  geom_point( position = position_jitterdodge(jitter.width = 0.1) )
 # The new object is now stored in the Data pane as a "list".
 # Click on the object.
 # What do you think the different components represent?
