@@ -23,7 +23,7 @@ install.packages( "ggpubr" )
 library( tidyverse ) 
 # Set option to see all columns and more than 10 rows.
 options( dplyr.width = Inf, dplyr.print_min = 100 )
-library( psych ) #plot correlation among predictors
+library( psych ) # Plot correlation among predictors
 library( ggpubr )
 
 # Create an object containing your working directory's Path. 
@@ -58,16 +58,16 @@ clim_df <- read.csv( file = paste( datadir, "clim_df.csv", sep="" ) )
 # Note how each data set contains overlapping information with at least one of the
 # other data sets.
 # "spp_df" and "hab_df" both have a column representing each site's "id".
-# "spp_df" and clim_df both have information on each site's location coordinates.
+# "spp_df" and clim_df both have information on each site's coordinates.
 # These shared columns will allow us to combine all data sets into a single
 # data object.
 
 # Make sure that the variable to be joined is formatted correctly.
 str( spp_df )
-spp_df$id <- as.character( spp_df$id )
+spp_df$id <- as.factor( spp_df$id )
 
 str(hab_df)
-hab_df$id <- as.character( hab_df$id )
+hab_df$id <- as.factor( hab_df$id )
 
 # Join the species and habitat components by "id" into a data frame.
 alldata <- left_join( spp_df, hab_df, by = "id" ) %>%
@@ -91,7 +91,6 @@ alldata <- left_join( alldata, clim_df, by = c( "x", "y") )
   
 # Check the combined data frame.
 head( alldata ); dim( alldata )
-# Note how additional rows were created when "clim_df" was added.  Why?
 
 
 # Preliminary checks prior to analysis ---------------------------
@@ -124,6 +123,8 @@ ggscatter( alldata, x = "y", y = "Rain", add = "reg.line", conf.int = 0.95, cor.
 # Are there any predictors we can/cannot potentially use together in the same model?
 # Which and why?
 # What other preliminary data checks would you perform?
+# What does the "Removed rows containing non-finite values" error tell you?
+# How can you fix this issue?
 
 
 # Save relevant data and workspaces ---------------------------
