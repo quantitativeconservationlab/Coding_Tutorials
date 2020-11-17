@@ -19,6 +19,7 @@
 # http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html
 # In addition, please download the "Data Visualization with ggplot2 Cheat Sheet"
 # located at: https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf
+# We will also briefly explore methods to process and plot temporal data.
 
 # To begin this tutorial, follow the "Initial preparation" steps from Part 1 to clear 
 # the workspace, release the computer's memory, and set the appropriate working directory.
@@ -28,10 +29,10 @@
 library( tidyverse ) # ggplot2 is included as part of the "tidyverse" suite of packages
 # Alternatively, you could load only the packages that you will be using separately:
 library( ggplot2 )
-library( lubridate ) # This package is great for handling dates easily
+library( lubridate ) # This package is great for handling dates easily.
 
 # Import the clean, tidy data frame produced from Part 2.
-CountMatrix_Combined_Melt <- read.csv("Data/CountMatrix_Combined_Melt.csv")
+CountMatrix_Combined_Melt <- read.csv( "Data/CountMatrix_Combined_Melt.csv" )
 
 # Make sure variables are assigned to the appropriate class.
 str(CountMatrix_Combined_Melt)
@@ -43,7 +44,7 @@ CountMatrix_Combined_Melt$Animal_Counts <- as.numeric( CountMatrix_Combined_Melt
 # Note how importing the previously saved .csv file does not always conserve the 
 # appropriate variable classes.
 
-# ggplot2 data requirements and coding syntax ################################# 
+# ggplot2 coding syntax ################################# 
 
 # ggplot2 is a robust data visualization package that is often used to create
 # publication-quality plots.
@@ -51,7 +52,6 @@ CountMatrix_Combined_Melt$Animal_Counts <- as.numeric( CountMatrix_Combined_Melt
 # coding.
 # Further, input data often needs to be provided in long (tidy) format, so that 
 # each column contains values for a single variable type.  
-
 # It is imperative to understand the foundation of a line of code in ggplot2.
 # MOST plots are created by starting with the function ggplot().
 # This function designates the first argument as the data used to source the 
@@ -106,51 +106,54 @@ animal_plot +  geom_boxplot( aes(color = Site_Name) )
 # Although our plot is now more informative, we still don't have visual information
 # on the number of observations (i.e. counts for each camera for each animal at each site).
 # Let's add the points used to create the box plots. 
-# Since we need to group by color for both the points and the boxplots we write the 
+# Since we need to group by color for both the points and the box plots, we write the 
 # entire function again instead of calling the one we save previously.
 ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
   geom_point()
-# You can see that the points are not overlapping with their associated box plots.  
+# You can see that while the points have been added, they are not overlapping with 
+# their associated box plots.  
 
 # Most plotting functions have many arguments that can modify the output.
 # One of the most common arguments is "position", which allows for modification of 
 # the orientation in which plots are presented.
 # Here, we define the position of the points using the position_jitterdodge() function.
-ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, 
-            color = Site_Name) ) +
+ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
-  geom_point( position = position_jitterdodge(jitter.width = 0) )
+  geom_point( position = position_jitterdodge( jitter.width = 0) )
 # The points are now aligned correctly.
 # However, not all cameras are visualized, since some of the points overlap 
 # (i.e. different cameras that had the same number of counts for a given animal).
 # You can spread the points by increasing the value of the "jitter.width" argument.
 ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
-  geom_point( position = position_jitterdodge(jitter.width = 0.1) )
+  geom_point( position = position_jitterdodge( jitter.width = 0.1) )
 
-# We are now happy with how the data are displayed we can save the plot by assigning
+# We are now happy with how the data are displayed and can save the plot by assigning
 # it to an object like we did previously. 
 # A ggplot can be stored as an object at any time.
 # Remember, only code that you store as an object can be easily saved.
 animal_boxplot <- 
   ggplot( CountMatrix_Combined_Melt, aes( x = Animal, y = Animal_Counts, color = Site_Name) ) +
   geom_boxplot() +
-  geom_point( position = position_jitterdodge(jitter.width = 0.1) )
+  geom_point( position = position_jitterdodge( jitter.width = 0.1) )
 # The new object is now stored in the Data pane as a "list".
 # Click on the object.
 # What do you think the different components represent?
 
-# If we want to view, we can also just call it the object.
+# If we want to view, we can also just call the object.
 animal_boxplot
 
 # We can then modify how it is displayed by building on it like we have been doing. 
-# One common modification is altering the axes
+# One common modification is altering the axes.
 # Here, lets make the y-axis range from 0 to 9 with 4 evenly spaced tick marks 
 # represented by their appropriate value using the scale_y_continuous() function.
 animal_boxplot <- 
   animal_boxplot + 
   scale_y_continuous( limits = c(0, 9), breaks = c(0, 3, 6, 9) )
+
+# View
+animal_boxplot
 # It is often beneficial to add some extra space at the top of the plot to provide 
 # room for statistical annotation or other information.
 
@@ -158,26 +161,22 @@ animal_boxplot <-
 # providing a title.
 # Add new names to the axes using the xlab() and ylab() functions and assign a 
 # title with the ggtitle() function.
-animal_boxplot <- 
-  animal_boxplot + 
+animal_boxplot + 
   xlab( "Animal Type" ) + 
   ylab( "Site Counts" ) +
   ggtitle( "Animal Site Counts" )
-
-# View
-animal_boxplot
 
 # You can also use preset themes.
 animal_boxplot + theme_bw()
 # Or
 animal_boxplot + theme_classic()
 
-# You can also increase font size for all items on the plot and shift legend location
+# You can also increase font size for all items on the plot and shift legend location.
 animal_boxplot + theme_classic(base_size = 15) + theme( legend.position = "bottom" )
 # Did you notice our titles disappeared? That is because the order in which we call our 
 # functions in ggplot matters. Here we had relabeled and the we accidentally overwrote 
 # them by setting our classic theme. So we need to modify the order in which we provide 
-# these arguments.  We now save our last plot that we are happy with. 
+# these arguments.  We now store our last plot that we are happy with. 
 # Notice additional tweaks to the look of the plot in each line:
 animal_boxplot <- 
   animal_boxplot + # We replace the latest plot
@@ -200,7 +199,7 @@ animal_boxplot
 # Many data sets include temporal data, such as the date in which observations were collected.
 # Dates can be difficult to manage in R.
 # To deal with dates, we use the "lubridate" package to create a new column where our Date, 
-# which is currently in character format, turns into "Date" format.
+# which is currently in character format, is converted into "Date" format.
 CountMatrix_Combined_Melt$PrettyDate <- lubridate::as_date( CountMatrix_Combined_Melt$Date, format = "%m/%d/%y" )
 
 # Check the structure of the new "PrettyDate" variable.
@@ -209,21 +208,21 @@ str(CountMatrix_Combined_Melt$PrettyDate)
 # Note how the output date is formatted as "y-m-d".
 # This is the date format preferred by R.
 # Our original dates were formatted as "m/d/y".
-# Therefore, we needed to provide the "format" argument to the as_date() function
+# Therefore, we needed to provide the correct "format" argument in the as_date() function
 # to clarify the current date format, so that lubridate could convert to the correct
 # format.
 # Working/converting dates can become complex and convoluted, therefore, it is
 # recommended to make sure that dates are recorded in "y-m-d" format during initial
 # data collection and processing.
 # Once, dates are properly formatted, lubridate can easily perform other date-related
-# processing, including: calculation of relative days within a year, extract various
-# date components, summarize data by different temporal parameters etc.
+# processing including: calculating relative days within a year, extracting various
+# date components, summarizing data by different temporal parameters etc.
 # More information on how to use this package is available at:
 # https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html
 
 # To get a quick idea of how occupancy changed with time for each species we 
 # could get the mean value across our camera traps and plot those.
-# Since we don't need the means for anything other than plotting we can combine 
+# Since we don't need the means for anything other than plotting, we can combine 
 # the power of piping %>% with that of ggplot. 
 # Here we call our data frame, group it, and create summary data. 
 # Remember doing this in the Data_Transformation.R script?
@@ -245,7 +244,7 @@ ggplot( . ,
   geom_line( size = 1.5 ) + # Add lines for tracing occupancy for each species and increase their thickness
   geom_point( size = 3 ) + # Add points for these data and increase point size
 theme_classic( base_size = 15 ) + # Add our preset classic theme
-labs( x = "Sampling date", #relabel 
+labs( x = "Sampling date", # Relabel 
       y = "Mean occupancy",
       color = "Species" )
 # If you like this plot, you need to save it as an object.
@@ -254,10 +253,9 @@ labs( x = "Sampling date", #relabel
 # than just focusing on the mean? 
 # You can use your original dataframe and create smoothed lines that average across 
 # your data and include variance within ggplot:
-ggplot( CountMatrix_Combined_Melt, 
-        aes( x = PrettyDate, y = Relative_Occupancy, color = Animal ) ) +
-          geom_smooth() + # Here we create the smoothed mean with confidence intervals
-          geom_point() # Here we plot the raw data to check that our model provides a good fit
+ggplot( CountMatrix_Combined_Melt, aes( x = PrettyDate, y = Relative_Occupancy, color = Animal ) ) +
+  geom_smooth() + # Here we create the smoothed mean with confidence intervals
+  geom_point() # Here we plot the raw data to check that our model provides a good fit
 # We leave you to modify the labels, theme, sizes etc based on what you learned 
 # previously.
 
@@ -268,13 +266,13 @@ ggplot( CountMatrix_Combined_Melt,
 # and plot dimensions:
 ggsave("Data/AnimalOccupancy.png", dpi=500, height=4, width=5, units="in" )
 
-# You can also save plots as .rds files using the saveRDS() function if you plan
+# You can also save plot objects as .rds files using the saveRDS() function if you plan
 # on further modifying the plot.
 # Here, we save our previously stored box plot object.
 saveRDS( animal_boxplot, "Data/animal_boxplot.rds" )
 
 # Import plots using the readRDS() function.
-AnimalCount_Box <- readRDS( "Data/AnimalCount_Box.rds" )
+animal_boxplot <- readRDS( "Data/animal_boxplot.rds" )
 
 # What other plots do you want to save? 
 
