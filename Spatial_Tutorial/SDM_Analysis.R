@@ -5,7 +5,7 @@
 # Here, we analyze our data using the sdm package. 
 # For more details on the utility of this package see: 
 # Naimi, B. & Araújo, M.B. (2016) sdm: a reproducible and extensible R 
-# platform for species distribution modeling. Ecography 39:368-375. #
+# platform for species distribution modeling. Ecography 39:368-375. 
 
 # Our data are presences/absences. 
 # We therefore choose models that can take advantage of absences rather than those 
@@ -22,7 +22,7 @@ gc()
 # Install relevant packages. 
 install.packages( "sdm" ) 
 # sdm relies on other packages for analysis. Install those associated packages:
-installAll( )
+sdm::installAll( )
 install.packages( "Hmisc" )
 
 # Load relevant packages.
@@ -44,7 +44,7 @@ datadir <- paste( workdir, "/Data/", sep = "" )
 # Import the combined data set produced from Part 4 (alldata.csv).
 alldata <- read.csv( file = paste( datadir, "alldata.csv", sep="" ) )
 
-# View imported data
+# View imported data.
 head( alldata )
 glimpse( alldata )
 
@@ -52,7 +52,7 @@ glimpse( alldata )
 str( alldata )
 alldata$id <- as.factor( alldata$id )
 
-# Remove any duplicated rows using dplyr::distinct(.
+# Remove any duplicated rows using dplyr::distinct().
 which( duplicated( alldata$id ) )
 alldata <- alldata %>% distinct()
 # This function only keeps the first of the duplicated rows.
@@ -106,15 +106,15 @@ head( pa.data[ , covnames ] )
 # Plot predictor distributions:
 
 # There are many different ways to plot data.
-# For preliminary checks, it is often easiest to plot using the basic plotting tools
+# For preliminary checks, it is often easiest to use the basic plotting tools
 # provided in R.
 # We will be plotting the distributions for all predictor variables (stored in "covnames").
 
 # Check how many plots will be produced:
 length( covnames )
 
-# To all plots simultaneously, we need to create grid with dimensions that can 
-# accommodate all of the plots.
+# To view all plots simultaneously, we need to create grid with dimensions that can 
+# accommodate 18 plots.
 
 # Set the grid dimensions in which the plots will be displayed.
 par( mfrow = c(3, 6) )
@@ -127,14 +127,15 @@ for (i in 1:length( covnames) ){
   
 }
 # Click the "Zoom" button in the "Plots" tab to better view the plots.
+# You can expand the Zoom window for better visualization.
 # You may get an error: "figure margins too large".
 # What does this mean?
 # How can you fix it?
 
-# When you are finished plotting, use the graphics.off() function to reset the plot grid.
+# When you are finished plotting, use the graphics.off() function to reset the plot space.
 graphics.off()
 
-# Calculate correlation coefficients and p-values amongst covariates.
+# Calculate correlation coefficients and p-values among covariates.
 cov_cor <- Hmisc::rcorr( as.matrix( pa.data[ , covnames ] ), type = "spearman" )
 # Note how the output of the rcorr() function is a "list".
 # Why was the "spearman" method used?
@@ -170,14 +171,12 @@ head( test.padata ); dim( test.padata )
 
 # To analyze data using sdm we first need to get data ready for analysis using 
 # the sdmData() function. 
-# By using the formula option we can specify which predictors we want to include, 
-# and can incorporate multiple species as responses (on the left-hand side of the equation).
-# We can specify site locations, with coords(x + y), and the data frame that contains our data. 
-# Further, we provide rasters as our predictors and implement several approaches for 
-# estimating a testing data set (including Cross-Validation). 
-# In our example, we do those outside of the package, can you think of reasons why?
+# By using the "formula" option, we can specify which predictors we want to include
+# (on the right-hand side of the equation) and can incorporate multiple species 
+# as responses (on the left-hand side of the equation).
+# We can specify site locations with coords(x + y) and the data frame that contains our data. 
 
-# Define our data, response and predictors:
+# Define our data, response, and predictors:
 hethd <- sdmData( formula = heth ~ Open.Water + Developed..Open.Space + Developed..Low.Intensity + Developed..Medium.Intensity + Developed..High.Intensity + Barren.Land + 
                   Deciduous.Forest + Evergreen.Forest + Mixed.Forest + Shrub.Scrub + Herbaceuous + Hay.Pasture + Cultivated.Crops + Woody.Wetlands + Emergent.Herbaceuous.Wetlands + Other + MinT + Rain + coords(x + y) + g(id), 
                   train = train.padata, test = test.padata )
@@ -205,17 +204,18 @@ m1
 getModelInfo( m1 )
 # What do these results tell us? 
 
-# What about our predictors? Which are important in modeling the Hermit thrush distribution? 
-# The sdm package can estimate which variables were important for each method using our training data:
+# What about our predictors? 
+# Which are important in modeling the Hermit Thrush distribution? 
+# The sdm package can estimate which variables were important using our training data:
 vi1.1 <- getVarImp( m1, id = 1, wtest = "training" )
 
 # Plot the results of the model.
 plot( vi1.1, "auc", main = "glm" )
-# According to these results, which variables are influencing the model's results?
+# Which variables are influencing the model's results?
 
 # Model evaluation:
 # Can our model discriminate whether a species is present at a site or not?
-# We assess this by estimating, the plot Receiver Operating Characteristic (ROC) Curve (AUC):
+# We assess this by estimating the plot Receiver Operating Characteristic (ROC) Curve (AUC):
 roc( m1 )
 # What is AUC a measure of? What do the x and y axes represent? 
 # You may want to refresh your memory by re-reading:
