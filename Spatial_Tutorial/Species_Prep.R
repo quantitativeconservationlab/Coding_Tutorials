@@ -170,7 +170,7 @@ sites <- sf::st_as_sf( sites )
 sf::st_write( sites, paste( datadir, "sites.shp", sep = ""), driver = "ESRI Shapefile" )
 
 # Save workspace in a manually created subdirectory.
-save.image( "Workspaces/Species_Prep1.RData" )
+save.image( paste( workdir, "/Workspaces/Species_Prep1.RData", sep = "" ) )
 
 # Go to Climate_Prep.R next.
 

@@ -27,7 +27,7 @@ library( psych ) # Plot correlation among predictors
 library( ggpubr )
 
 # Create an object containing your working directory's Path. 
-workdir <- getwd()
+workdir <- paste( getwd(), "/Spatial_Tutorial", sep = "" )#getwd() #
 
 # Create an object containing your "Data" directory's Path. 
 datadir <- paste(workdir, "/Data/", sep = "")
@@ -39,11 +39,15 @@ datadir <- paste(workdir, "/Data/", sep = "")
 # Import our cleaned species data.
 spp_df <- read.csv( file = paste( datadir, "spp_df.csv", sep="" ) )
 # These data contain site-specific coordinates and occupancy counts.
+#check:
+head( spp_df ); dim( spp_df )
 
 # Import our cleaned habitat data.
 hab_df <- read.csv( file = paste( datadir, "hab_df.csv", sep="" ) )
 # These data contain the relative coverage of the different land cover types
 # for each study site.
+#check:
+head( hab_df ); dim( hab_df )
 
 # Import predictor data:
 # Import our cleaned climate data.
@@ -51,11 +55,12 @@ clim_df <- read.csv( file = paste( datadir, "clim_df.csv", sep="" ) )
 # These data contain site-specific coordinates in addition to the minimum
 # temperature and precipitation normals gathered from the PRISM database and
 # averaged across the bird's breeding season June-July.
-
+#check:
+head( clim_df ); dim( clim_df )
 
 # Combine all of our data into a single data frame ---------------------------
-
-# Note how each data set contains overlapping information with at least one of the
+# Note that all dataframes contain the same number of rows and how
+# each dataframe contains overlapping information with at least one of the
 # other data sets.
 # "spp_df" and "hab_df" both have a column representing each site's "id".
 # "spp_df" and clim_df both have information on each site's coordinates.
@@ -75,6 +80,9 @@ alldata <- left_join( spp_df, hab_df, by = "id" ) %>%
 
 # Double-check that data were combined correctly.
 head( alldata ); dim( alldata )
+# Note that the number of rows was maintained. This is a really important
+# check when joining dataframes....sometimes if we do not code it correctly
+# we can either inadvertently remove or add rows
 
 # Now combine with climate data frame.
 # Note that the coordinate column names are not conserved between the two data sets.
@@ -85,6 +93,11 @@ colnames( clim_df )[ which( colnames( clim_df ) == "coords.x2" ) ] <- "y"
 
 # Double-check that the column names have been correctly modified.
 colnames( clim_df )
+# check whether our joining column is unique:
+# Are there any duplicated records:
+sum( duplicated( clim_df) #[ ,c("x", "y" ) ] ) )
+# Yes! Which are they?:
+clim_df[ duplicated( clim_df[ ,c("x", "y" ) ] ), ]
 
 # Join the data sets by the two coordinate columns.
 alldata <- left_join( alldata, clim_df, by = c( "x", "y") ) 
@@ -121,7 +134,8 @@ ggscatter( alldata, x = "y", y = "Rain", add = "reg.line", conf.int = 0.95, cor.
   stat_cor( method = "spearman" ) + geom_smooth() + theme_bw()
 
 # Are there any predictors we can/cannot potentially use together in the same model?
-# Which and why?
+# Which weather variable is correlated to latitude (y)? does it make sense?
+
 # What other preliminary data checks would you perform?
 # What does the "Removed rows containing non-finite values" error tell you?
 # How can you fix this issue?

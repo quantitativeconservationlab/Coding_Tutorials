@@ -36,30 +36,20 @@ library( Hmisc )
 # Loading data and defining required objects -------------------------------  
 
 # Create an object containing your working directory's Path. 
-workdir <- getwd()
+workdir <- getwd() #paste( getwd(), "/Spatial_Tutorial", sep = "" )
 
 # Create an object containing your "Data" directory's Path.
 datadir <- paste( workdir, "/Data/", sep = "" )
 
 # Import the combined data set produced from Part 4 (alldata.csv).
 alldata <- read.csv( file = paste( datadir, "alldata.csv", sep="" ) )
-
 # View imported data.
-head( alldata )
+head( alldata ); dim( alldata )
 glimpse( alldata )
 
 # Set appropriate variable classes.
 str( alldata )
 alldata$id <- as.factor( alldata$id )
-
-# Remove any duplicated rows using dplyr::distinct().
-which( duplicated( alldata$id ) )
-alldata <- alldata %>% distinct()
-# This function only keeps the first of the duplicated rows.
-
-# Double-check duplicated rows removed
-which( duplicated( alldata$id ) )
-
 
 # Setting general vectors------------------------------- 
 

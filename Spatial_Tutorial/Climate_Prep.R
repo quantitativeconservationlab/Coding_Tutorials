@@ -38,7 +38,7 @@ library( latticeExtra )
 # Create an object containing the working directory's Path. 
 # This may differ depending on your directory structure.
 # What is yours?
-workdir <- getwd()
+workdir <- getwd() #paste( getwd(), "/Spatial_Tutorial", sep = "" )#
 
 # Create an object containing your "Data" directory's Path.
 datadir <- paste( workdir, "/Data/", sep = "" )
@@ -219,7 +219,7 @@ rainvals <- raster::extract( Rain, sites )
 head( rainvals ); length( rainvals )
 
 # Combine site locations to climate values
-clim_df <- as.data.frame( sites@coords ) %>%
+clim_df <- as.data.frame( sites@data ) %>%
   #we can use mutate to add multiple new columns 
   dplyr::mutate( MinT = minTvals, 
                  Rain = rainvals )
