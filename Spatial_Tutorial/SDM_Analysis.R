@@ -13,7 +13,7 @@
 
 ################################################################################
 
-# Initial preparation (do this every time you start a new script) ---------------------
+# Initial preparation (do this every time you start a new script) #################
 
 # Clear your work space and release your computer's memory.
 rm( list = ls() ) 
@@ -36,13 +36,14 @@ library( Hmisc )
 # Loading data and defining required objects -------------------------------  
 
 # Create an object containing your working directory's Path. 
-workdir <- getwd() #paste( getwd(), "/Spatial_Tutorial", sep = "" )
+workdir <- getwd() 
 
 # Create an object containing your "Data" directory's Path.
 datadir <- paste( workdir, "/Data/", sep = "" )
 
 # Import the combined data set produced from Part 4 (alldata.csv).
 alldata <- read.csv( file = paste( datadir, "alldata.csv", sep="" ) )
+
 # View imported data.
 head( alldata ); dim( alldata )
 glimpse( alldata )
@@ -77,7 +78,7 @@ pa.data <- alldata %>% dplyr::select( -eame ) # Remove data for Eastern Meadowla
 head( pa.data )
 
 # Define predictor names.
-covnames <- colnames( pa.data )[ which( !names( pa.data ) %in% c("id", "x", "y", "heth", "SurveyDate", "Year", "julian", "hour" ) ) ]
+covnames <- colnames( pa.data )[ which( !names( pa.data ) %in% c("id", "x", "y", "heth", "SurveyDate", "Year", "julian", "hour", "FID" ) ) ]
 
 # Check that you selected the appropriate columns.
 head( pa.data[ , covnames ] )
@@ -121,6 +122,7 @@ for (i in 1:length( covnames) ){
 # You may get an error: "figure margins too large".
 # What does this mean?
 # How can you fix it?
+# Your graphs may also look distorted, how can you fix this?
 
 # When you are finished plotting, use the graphics.off() function to reset the plot space.
 graphics.off()
@@ -159,7 +161,7 @@ head( test.padata ); dim( test.padata )
 
 # Analyzing our data -------------------
 
-# To analyze data using sdm we first need to get data ready for analysis using 
+# To analyze data using sdm we first need to format the data for analysis using 
 # the sdmData() function. 
 # By using the "formula" option, we can specify which predictors we want to include
 # (on the right-hand side of the equation) and can incorporate multiple species 
@@ -176,12 +178,13 @@ hethd
 
 # Now that we've input the data, we are ready to run the analysis. 
 # The sdm package allows the concurrent use of multiple methods, however, we will 
-# only construct a general linearized model (glm) in this tutorial.
+# only construct a generalized linear model (glm) in this tutorial.
 # Make sure that you select methods that are suitable for your data type. 
 m1 <- sdm( heth ~., data = hethd, methods = "glm" )
 # Since we already defined our predictors in our data object, we can use "." to 
 # tell the function to include them all. 
 # Note that by doing this we are including covariates that are highly correlated. 
+
 # The authors claim the sdm package can use a variance inflation factor (VIF) 
 # to measure how much a predictor is explained by alternative predictors. 
 # If it doesn't provide additional information it is removed. 
@@ -190,8 +193,8 @@ m1 <- sdm( heth ~., data = hethd, methods = "glm" )
 # What are alternative approaches to deal with collinearity in our predictors? 
 
 # View results
-m1
 getModelInfo( m1 )
+m1
 # What do these results tell us? 
 
 # What about our predictors? 
@@ -208,6 +211,7 @@ plot( vi1.1, "auc", main = "glm" )
 # We assess this by estimating the plot Receiver Operating Characteristic (ROC) Curve (AUC):
 roc( m1 )
 # What is AUC a measure of? What do the x and y axes represent? 
+
 # You may want to refresh your memory by re-reading:
 # Jiménez-Valverde, A. (2012) Insights into the area under the receiver operating 
 # characteristic curve (AUC) as a discrimination measure in species distribution modeling. 
@@ -233,6 +237,7 @@ getEvaluation( m1, stat = c( "TSS", "AUC",  "Sensitivity", "Specificity" ), opt 
 # Save our data frames as .csv files so that they can be used by other scripts.
 write.csv( x = train.padata, file = paste( datadir, "train_padata.csv", sep="" ), 
            row.names = FALSE )
+
 write.csv( x = test.padata, file = paste( datadir, "test_padata.csv", sep="" ), 
            row.names = FALSE )
 

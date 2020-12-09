@@ -12,14 +12,12 @@
 # sites (using a buffer). 
 
 ################################################################################
+
 # Initial preparation (do this everytime you start a new script) ######################
 
 # Clear your work space and release your computer's memory.
 rm( list = ls() )
 gc()
-
-# Install the required packages.# remember this is only done once. 
-install.packages( "raster" ) # Extracts climate data from PRISM
 
 # Load relevant packages. This is done every time you open Rstudio #
 library( tidyverse )
@@ -37,7 +35,7 @@ workdir <- getwd()
 # Create an object containing your "Data" directory's Path.
 datadir <- paste( workdir, "/Data/", sep = "" )
 
-# Set path to habitat layer .img file.
+# Set Path to the habitat layer .img file.
 habpath <- paste( datadir, "NLCD_LandCover_2016/NLCD_2016_Land_Cover_L48_20190424.img", sep = "" )
 
 # Import .img file as a raster file using the "raster" package.
@@ -55,10 +53,10 @@ head( nlcdlegend, 15 )
 # What are the possible habitat types?
 unique( nlcdlegend$Legend )
 
-#import clean species dataframe to extract 
+# Import clean species dataframe.
 spp_df <- read.csv( paste( datadir, "spp_df.csv", sep = ""), header = TRUE )
 
-# import our sites spatial points:
+# Import our sites spatial points.
 sites <- rgdal::readOGR( paste( datadir, "sites.shp", sep = "") )
   
 # Convert CRS of site points to match habrast.
@@ -67,7 +65,7 @@ sites_transf <- spTransform( sites, proj4string( habrast ) )
 # "sites" is a much smaller file than the NLCD  data so it is much faster to do this.
 # Notice that we didn't actually replace our sites but created a new "sites_transf" object.
 
-#### Extract landcover for our sites ------------------------------------------
+#### Extract land cover for our sites ------------------------------------------
 
 # Create a function that summarizes the proportion of each cover type 
 # for each site.
@@ -82,7 +80,7 @@ sites_transf <- spTransform( sites, proj4string( habrast ) )
 
 # Output:
 # Data frame with proportions of habitats found within buffer area 
-# surrounding study sites.
+# surrounding the study sites.
 # When are functions useful? Why create them?
 
 summarize_landcover <- function( lcraster, nlcdlegend, sites, siteid, buf = NULL ){
