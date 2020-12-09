@@ -2,10 +2,10 @@
 # This tutorial was created by Jen Cruz and modified in collaboration with 
 # Jonas Frankel-Bricker. 
 
-# This spatial tutorial will walk you through an example of how to perform a basic 
-# Species distribution model. We start with data download and preparation, 
-# data include species, climate, and habitat data. We then combine them all  
-# for analysis.
+# The Spatial_Tutorial will walk you through an example of how to prepare and combine
+# a variety of different data types for analysis with a basic species distribution
+# model (SDM).  We begin with data download and preparation.  Data include species, 
+# climate, and habitat data. We then combine them all for analysis.
 #
 # Please review the readme file for details of the data and model you will be using. 
 #
@@ -48,8 +48,8 @@ getwd()
 workdir <- getwd()
 
 # Create an object containing your "Data" directory's Path.
-# Here we set it as a subdirectory in the Rproject folder but remember that you 
-# probably want yours to be in your google drive so that your data are getting backed up. 
+# Here we set it as a subdirectory in the RProject folder but remember that you 
+# probably want yours to be in your Google Drive so that your data are getting backed up. 
 datadir <- paste(workdir, # The paste function combines two character objects.
                  "/Data/", # Path to our subdirectory.
                  sep = "") # Joins the two Paths with no spaces.
@@ -57,15 +57,15 @@ datadir <- paste(workdir, # The paste function combines two character objects.
 # Assigning directories this way helps to automate data handling and eliminate manual 
 # transfer of data files. 
 
-# First, lets import a shapefile (.shp) of Wisconsin. 
+# First, let's import a shapefile (.shp) of Wisconsin. 
 # Importing a shapefile with the "rgdal" package also imports its projection. 
-# You can also import shapefiles using maptools without projections. 
+# You can also import shapefiles without projections using the maptools package. 
 
 # Import Wisconsin shapefile including its projection using the readOGR() function.
 WI <- rgdal::readOGR( paste( datadir, "Wi_State_Outline/WI_state_outline.shp", sep="" ) )
 # This creates a Spatial Polygons data frame class object.
 # For this function to work, you need the .shp file and the other associated files 
-# located in the Path.
+# located in the same Path.
 # View the file details.
 summary( WI )
 # What do you think the "min" and "max" values represent in the "Coordinates:" tab?
@@ -77,13 +77,14 @@ plot( WI )
 # The "sppdata.csv" file contains simulated presence/absence observations of two bird species
 # to resemble sampling from the Wisconsin Bird Atlas. 
 # The file also contain survey locations represented as eastings and northings.
-# For more details on Wisconsin Bird Atlas (2016-2017) see: http://www.uwgb.edu/birds/wbba/index.htm 
+# For more details on Wisconsin Bird Atlas (2016-2017) see: 
+# http://www.uwgb.edu/birds/wbba/index.htm
 
-# Here we focus on the Hermit Thrush ("heth"). 
-# Data for the Eastern Meadowlark ("eame") are available for you to practice. 
+# Here we focus on the Hermit Thrush ("heth") data. 
+# Data for the Eastern Meadowlark ("eame") are available for you to practice with. 
 
-# Remember we created a path to the data folder. 
-# Here we use it to define the correct path to the file to import.
+# Remember we created a Path to the data folder. 
+# Here we use it to define the correct Path to the file to import.
 spp_df <- read.csv( file = paste( datadir, "sppdata.csv", sep = "" ), # Specifies the data file name
                     header = TRUE, # Keeps column labels
                     strip.white =TRUE ) # Removes white spaces 
@@ -104,12 +105,12 @@ spp_df$id <- as.character( spp_df$id )
 spp_df$Year <- as.factor( spp_df$Year )
 
 # "id" represents the site name where the survey took place.
-# The values in "eame" reflect whether the bird was present (1) or absent (0) at each site.
+# The values in "heth" reflect whether the bird was present (1) or absent (0) at each site.
 # "x" and "y" are GPS coordinates defined by a specific Coordinate Reference System (CRS).
 # When you import spatial data into R you can specify the CRS using its EPSG code. 
 # See: http://www.spatialreference.org 
 # You should always know what the CRS is for the spatial data you plan to use (or collect).
-# If you don't understand CRS then check the resources available at:
+# For additional information regarding CRS review the resources available at:
 # https://geocompr.robinlovelace.net/spatial-class.html#crs-intro 
 
 # How many presences and absences were observed?
@@ -117,7 +118,7 @@ table( spp_df$heth )
 # What does this tell you about your sample size?
 
 # View the spatial distribution of your observations using the "ggplot2" package.
-ggplot( data = spp_df, # Selects the data source you want to plot .
+ggplot( data = spp_df, # Selects the data source you want to plot 
         aes( x, y, color = factor( heth ) ) ) + # Uses species observations to color-code locations
   geom_point() + # Plots locations as points
   theme_bw() # Assigns a black and white preset theme to the plot
@@ -147,9 +148,8 @@ class( sites ); head( sites )
 # We convert the projection of our Wisconsin shapefile to match our site projection.
 WI <- sp::spTransform( WI, proj4string( sites ) )
 # Note: A common mistake when working with spatial data is forgetting to match their 
-# projections.
-# This is particularly common when you are sourcing your data from multiple locations 
-# and can introduce significant errors in your analysis. 
+# projections, which can introduce significant errors in your analysis.
+# This is particularly common when you are sourcing data from multiple locations. 
 
 # Quick check if your sites are within your study area polygon. 
 plot( WI )

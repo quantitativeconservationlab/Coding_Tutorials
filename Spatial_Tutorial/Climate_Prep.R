@@ -4,7 +4,7 @@
 #
 # The distribution of hermit thrush during the breeding season in Wisconsin 
 # may be driven by climate. 
-# For our analysis we explore whether rainfall and temperature during the 
+# For our analysis, we explore whether rainfall and temperature during the 
 # breeding season of hermit thrush influence its distribution. 
 # We use the PRISM database to obtain national climate data for the lower 48 states
 # of the USA across 30 years at a resolution of 800m.
@@ -13,9 +13,9 @@
 # We work primarily with "raster" class objects.
 # Please see the following link for more information on raster data: 
 # https://geocompr.robinlovelace.net/spatial-class.html#raster-data
-#################################################################################
+################################################################################
 
-# Initial preparation (do this everytime you start a new script) ######################
+# Initial preparation (do this every time you start a new script) ######################
 
 # Clear your work space and release your computer's memory.
 rm( list = ls() )
@@ -32,6 +32,7 @@ library( prism ) #package for downloading prism data
 library( raster )
 library( rasterVis ) # Visualizes rasters
 library( latticeExtra )
+library( rgdal )
 
 # Importing data #################################
 
@@ -89,7 +90,7 @@ head( ls_prism_data( absPath = TRUE), 30 )
 # Define the new downloaded file name and Path.
 rainfiles <- paste( datadir, "PRISM_Jun-Jul_rain_30yrnorm", sep = "" )
 
-# Set "mintfiles" as the "global" Path to deposit data downloaded by the "prism" package.
+# Set "rainfiles" as the "global" Path to deposit data downloaded by the "prism" package.
 options( prism.path = rainfiles )
 
 # Download precipitation (ppt) normals data for June and July.
@@ -105,7 +106,8 @@ head( ls_prism_data( absPath = TRUE), 30 )
 
 # Preparing climate data #################################
 
-# Data are Minimum temperature and precipitation normals for June and July.
+# Data are Minimum temperature and precipitation normals for June and July across
+# the lower 48 states of the USA.
 # We need to subset these for only Wisconsin data.
 # We prepare temperature and precipitation separately. 
 # We then combine data from June and July by calculating mean values 
@@ -197,7 +199,7 @@ dim( RainWI )
 RainWI <- raster::crop( RainWI, WI ) 
 dim( RainWI )
 
-# Get seasonal mean of rainfall normals for the breeding season (Jun-Jul):
+# Get seasonal mean of rainfall normals for the breeding season (Jun-Jul).
 Rain <- stackApply( RainWI, 1:1, fun = mean )
 dim( Rain )  
 
