@@ -1,7 +1,7 @@
 ---
 title: "GitHub_Tutorial"
 author: "Jonas Frankel-Bricker"
-date: "10/30/20"
+date: "1/6/21"
 output:
   pdf_document:
     toc: yes
@@ -28,19 +28,14 @@ The following tutorial is presented as an introduction to using GitHub in combin
 
 2. Create an online repository to store code and data
 
-3. Construct an example R Project
+3. Construct an example R Project linked to the GitHub repository
 
-4. Link the R Project with the online repository
-
-5. Transfer information between platforms
-
-6. Manage the online repository
+4. Transfer information between platforms
 
 # Install "Git" on your computer
 If you are working on a Mac, your computer likely already has the Git program installed in the Path "/usr/local/git" or "/usr/bin/git".  However, Windows-based systems do not come with Git.  To install Git follow the instructions for your operating system provided at the URL: 
 https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 For Windows users, open the downloaded install file and accept all of the default options.  **Keep track of the Path where git.exe will be installed.  For most Windows users, this will be "C:/Program Files/Git/bin/git.exe".**
-
 
 # Set up a GitHub account
 Prior to working through this tutorial, you'll need to sign up for a GitHub account.
@@ -54,7 +49,7 @@ Prior to working through this tutorial, you'll need to sign up for a GitHub acco
 4. Verify your account and click the blue "Create Account" button
 
 # Create a GitHub repository
-Repositories are a core foundation of GitHub's infrastructure.  They serve as online directories that contain information that can be shared between researchers affiliated with a project.  All lab members will maintain their own private repositories to store functioning code.  Repositories are often composed of multiple "branches", which can serve as different "versions" of the repository.  The "main" branch represents the most up-to-date version of code.  You will spend most of your time exchanging information between your computer and the "main" branch.  As you write code on your local computer, it is imperative that you frequently save ("commit" and "push") the code to your online repository.  **Do not store code on GitHub that is broken or not functioning as intended.**  Saving working code in the online repository provides an invaluable safety net if your code gets broken on your local computer.  If this happens, you can simply reload the previous version stored on GitHub.  In this tutorial, you will be introduced to these concepts and components through the creation of a simple repository and transfer of information between this repository and an example R Project.  
+Repositories are a core foundation of GitHub's infrastructure.  They serve as online directories that contain information that can be shared between researchers affiliated with a project.  All lab members will maintain their own private repositories to store functioning code.   As you write code on your local computer, it is imperative that you frequently save ("commit" and "push") the code to your online repository.  **Do not store code on GitHub that is broken or not functioning as intended.**  Saving working code in the online repository provides an invaluable safety net if your code gets broken on your local computer.  If this happens, you can simply reload the previous version stored on GitHub.  In this tutorial, you will be introduced to these concepts and components through the creation of a simple repository and transfer of information between this repository and an example R Project.  
 
 First, navigate to your GitHub's homepage and create an online repository following these steps:
 
@@ -73,9 +68,9 @@ First, navigate to your GitHub's homepage and create an online repository follow
 ![](Screenshots/Final/Repository_Info.png){width=400px}
 \newline
 
-*A new repository has now been created.  Researchers with permission can now access the components of the repository.  Notice how the dropdown menu in the top left of the page says "main".  This indicates that you are viewing the "main" branch of the repository.  Currently, this is the only branch associated with the repository, and "README.md" is the only file in the repository.  For this example, "README.md" contains the the description of the repository you wrote when creating the repository.*  
+*A new repository has now been created.  Researchers with permission can now access the components of the repository.  For this example, "README.md" contains the the description of the repository you wrote when creating the repository.*  
 
-4. Click the green dropdown menu "Code" and press the clipboard icon to copy the repository's URL (hereafter, "Repository_URL")
+3. Click the green dropdown menu "Code" and press the clipboard icon to copy the repository's URL (hereafter, "Repository_URL")
 
 ![](Screenshots/Final/Repository_URL.png){width=450px}
 
@@ -92,6 +87,7 @@ This section focuses on the basic methods used to connect online repositories wi
   - Click "New Project"
   - Name the project "GitHub_Tutorial"
   - Click the "Browse" button and select the appropriate PATH where the project will be located 
+  - Check the "Create a git repository" box
   - Click "Create Project"
 
 ![](Screenshots/Final/RProject_1.png){width=450px}
@@ -101,14 +97,14 @@ This section focuses on the basic methods used to connect online repositories wi
 2. Set up version control with Git 
   - Click on the "Tools" tab at the top of screen
   - Select "Global Options" from the dropdown menu
-  - Select the "Git/SVN" tab at the left side of the window and click the "Enable version control for RStudio projects" box.  *You may need to provide the Path to the "Git executable".  If this is the case, click the "Browse" button and navigate to the Path where git.exe is located on your computer.*
+  - Select the "Git/SVN" tab at the left side of the window and click the "Enable version control for RStudio projects" box if it is not already checked.  *You may need to provide the Path to the "Git executable".  If this is the case, click the "Browse" button and navigate to the Path where git.exe is located on your computer.*
  - Click the "Apply" button (follow the prompt to restart the R session)
  
 3. Link GitHub with the R Project
   - Click on the "Tools" tab at the top of screen
   - Select "Project Options" from the dropdown menu
-  - Select the "Git/SVN" tab at the left side of the window and click "Git" from the "Version control system:" dropdown menu
-  - Click apply at the bottom of the window (follow the prompts to restart the R session)
+  - Select the "Git/SVN" tab at the left side of the window and click "Git" from the "Version control system:" dropdown menu if it is not already selected
+  - Click apply/OK at the bottom of the window (follow the prompts to restart the R session)
   
 4. Link the repository's URL with the R Project
   - Click on the "Tools" tab at the top of screen
@@ -120,7 +116,7 @@ This section focuses on the basic methods used to connect online repositories wi
 
 *For this example, "Repository_URL" is the unique URL associated with the online repository you copied earlier.  You can paste this in the shell terminal window.  "origin" now represents the online repository.*
 
-5. Pull the "main" branch from the repository
+5. Pull the information stored in the online repository to sync the two platforms
   - Type the following code in the shell terminal window and press enter:
   
     git pull origin main
@@ -130,7 +126,7 @@ This section focuses on the basic methods used to connect online repositories wi
 *This step "pulls" the contents located in the "main" branch of your online repository and places the information in your project's directory.  Note how the R Project's directory now contains the "README.md" file originally located in the online repository.*   
   
 # Working in RStudio
-Now that the R Project and online repository are linked, changes to the R Project can be "pushed" back to the online repository.  For this tutorial, you will process a very basic example data set, write several lines of code in an R script, "commit" these changes, and "push" the "commit" to a new branch of the online repository.  The experimental data you will use is a comma-separated values file named "CountMatrix.csv".
+Now that the R Project and online repository are linked, changes to the R Project can be "pushed" back to the online repository.  For this tutorial, you will process a very basic example data set, write several lines of code in an R script, "commit" these changes, and "push" the "commit" to the online repository.  The experimental data you will use is a comma-separated values file named "CountMatrix.csv".
 
 ![](Screenshots/Final/CountMatrix_1.png){width=400px}
 
@@ -166,75 +162,35 @@ CountMatrix <- read.csv("Data/CountMatrix.csv")
 ```
 
 # Initial GitHub commit and push to repository
-You have now made several additions to your R Project.  However, these changes have only been made on your local computer.  Remember, the "main" branch of the GitHub repository solely contains the "README.md" file at this time.  The following steps describe how to "commit" the changes you have made and "push" them to the online repository.    
+You have now made several additions to your R Project.  However, these changes have only been made on your local computer.  Remember, the GitHub repository solely contains the "README.md" file at this time.  The following steps describe how to "commit" the changes you have made and "push" them to the online repository.    
 
-1. Click the "Git" dropdown menu at the top of the RStudio window
-  - Select "Commit"
+1. Navigate to the "Git" tab/pane at the top right of your window
+  - Click on the "master" dropdown and select "main"
+  - This user interface will be where you perform all subsequent Git-related tasks
   
-![](Screenshots/Final/Git_DropDown.png){width=400}
+![](Screenshots/Final/Git_Pane.png){width=400}
 \newline
   
 2. Check the boxes next to the files you want to transfer to the online repository.  For this example, select the "GitHub_Code.R" and "Data/CountMatrix.csv" files.
-  - Boxes will turn green 
-  - Add a short and descriptive commit message to serve as an identifier.  For this example, type "Initial commit".
-  - Click the "Commit" button under the message section
-  - Close the subsequent windows
-
+  - Boxes will turn green
+  - Click the "Commit" button
+  - In the new window, add a short, descriptive commit message
+  - Click the "Commit" button in the new window when finished
+  
 ![](Screenshots/Final/Git_Commit_2.png){width=400}
 
 *You can make a "commit" at any time, however, only "commit" components that you are confident are correct and fully functional.  These will not be stored in your online repository until you "push" the "commit" (which requires an internet connection).  Always prioritize "committing" changes on your local computer first, especially when collecting data or writing code in the field.*  
 
-3. Navigate to the shell terminal
-  - Use the previously opened terminal or navigate Tools -> Shell
-  - Type the following code and press enter:
-  
-    git push -u origin master
+3. "Push" the commit to the GitHub repository
+  - In the "Git" pane/tab in the top right of the window, click the green "up" arrow
+*This will push "Initial commit" to the online repository*
 
-*This will push "Initial commit" to the online repository in a new branch called "master".*
+4. Navigate to the online repository to make sure the push was successful
+  - You may need to refresh web page
    
-# Processing commit in GitHub
-You have now pushed the changes you made in your R Project back to the online repository.  The next steps involve processing these changes in GitHub.  
-
-1. Navigate back to the online GitHub repository
-  - A new message at the top of the window states "Master had recent pushes..."
-
-![](Screenshots/Final/Master_1.png){width=400px}
-\newline
-
-2. Click the green "Compare & pull request" at the top of the window
-  - Set "base:" to "main" and "compare:" to "master"
-  
-![](Screenshots/Final/Master_2.png){width=400px}
-
-*This designates that you want to compare master (which contains "Initial commit") with "main" (your repository containing the most up-to-date code).*
-
-3. View the changes "Initial commit" will make to "main" 
-    - Scroll down to the bottom of the page to view all components added or revised in "Initial commit"
-    
-![](Screenshots/Final/Master_3.png){width=400px}
-
-*Always double-check all parts of a new "commit" before proceeding to the next step.*
-
-4. Create a "pull request"
-    - Write a descriptive comment for "Initial commit" 
-    - Click the green "Create pull request button"
-
-5. Merge the "pull request"
-  - Click the green "Merge pull request" button 
-  - Click the green "Confirm merge" button 
-  - Click the "Delete branch" button next to the message "Pull request successfully merged and closed" 
-
-![](Screenshots/Final/Master_4.png){width=400px}
-
-*These steps incorporate "Initial commit" with the "main" branch and delete the temporary "master" branch.*
-
-6. Confirm that "Initial commit" was successfully processed
-  - Navigate to the repository's home page
-  - Confirm that all components were successfully transferred to the "main" branch
-  
 ![](Screenshots/Final/Master_5.png){width=400px}
 
-*"GitHub_Code.R" and the "Data" directory containing "CountMatrix.csv" should now be located in the "main branch" along with the original "README.md" file.*
+*"GitHub_Code.R" and the "Data" directory containing "CountMatrix.csv" should now be located in "main" along with the original "README.md" file.*
 
 
 
