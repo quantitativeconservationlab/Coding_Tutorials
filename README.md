@@ -8,4 +8,6 @@ We recommend familiarizing yourself with the GitHub platform by working through 
 3) Click "Save link as..." from the dropdown menu and select where you would like to save the file
 4) The file will be downloaded as a ".txt" file, you can convert this back to a ".csv" file by changing the extension from .txt to .csv
 
+We also recommend that you download Google Chrome and set it as your default web browser to use when accessing the GitHub materials.
+
 We thank the NSF Track 2 EPSCoR Program award number OIA-1826801 and the NSF Idaho EPSCoR Program award number OIA-1757324 for support in developing these tutorials.
