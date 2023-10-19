@@ -80,8 +80,7 @@ sites_df <- st_drop_geometry( sites_trans ) %>%
   dplyr::select( site = Site, latitude = lat, longitude = lon )
 head(sites_df)
 
-#save in working directory as csv file for use in daymet download 
-write.csv( x= sites_df, file = paste0( sitedir,"sites_df.csv" ) )
+
 #####################################################################
 # Download climate data #################################
 #climate variable options include:
@@ -89,16 +88,42 @@ write.csv( x= sites_df, file = paste0( sitedir,"sites_df.csv" ) )
 #snow water equivalent (swe), solar radiation (srad), precipitation (prcp), #
 # day length (dayl) #
 
-#download data
-download_daymet_batch(
-  #define file name and location for site coordinates
-  file_location = paste0( sitedir,"sites_df.csv" ),
-  start = 2010,
-  end = 2011,
-  #if internal is FALSE then data are downloaded to disk
-  internal = FALSE,
-  #define where you want data downloaded
-  path = datadir
+### the package comes with tile_outlines (which are polygons) #
+# you can view them here:
+ggplot(tile_outlines)+ 
+  geom_sf() +
+  theme_void()
+
+#intercept the sites with the tiles to work out which we need 
+# to download
+out <- st_intersection( sites_trans, tile_outlines )
+head( out)
+#extract tile ids
+site_tiles <- unique( out$TileID)
+#download daymet data for relevant tiles
+download_daymet_tiles(
+  tiles = site_tiles,
+  start = 1980,
+  end = 1981,
+  path = datadir,
+  param = "ALL",
+  silent = FALSE,
+  force = FALSE
 )
+
+#this doesn't work and I have no idea why.#
+# #save in working directory as csv file for use in daymet download 
+# write.csv( x= sites_df, file = paste0( sitedir,"sites_df.csv" ) )
+# #download data at each site
+# download_daymet_batch(
+#   #define file name and location for site coordinates
+#   file_location = paste0( sitedir,"sites_df.csv" ),
+#   start = 2010,
+#   end = 2011,
+#   #if internal is FALSE then data are downloaded to disk
+#   internal = FALSE,
+#   #define where you want data downloaded
+#   path = datadir
+# )
 
 ################## end of script ##########################################
