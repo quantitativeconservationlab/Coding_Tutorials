@@ -111,19 +111,20 @@ download_daymet_tiles(
   force = FALSE
 )
 
-#this doesn't work and I have no idea why.#
+#####Alternatively if we want to download data for each site######
 # #save in working directory as csv file for use in daymet download 
-# write.csv( x= sites_df, file = paste0( sitedir,"sites_df.csv" ) )
-# #download data at each site
-# download_daymet_batch(
-#   #define file name and location for site coordinates
-#   file_location = paste0( sitedir,"sites_df.csv" ),
-#   start = 2010,
-#   end = 2011,
-#   #if internal is FALSE then data are downloaded to disk
-#   internal = FALSE,
-#   #define where you want data downloaded
-#   path = datadir
-# )
-
+write.csv( x= sites_df, file = paste0( sitedir,"sites_df.csv" ), 
+           row.names = FALSE )
+#download data at each site
+download_daymet_batch(
+  #define file name and location for site coordinates
+  file_location = paste0( sitedir,"sites_df.csv" ),
+  start = 2010,
+  end = 2011,
+  #if internal is FALSE then data are downloaded to disk
+  internal = FALSE,
+  #define where you want data downloaded
+  path = datadir
+)
+#### end of site-level download ###
 ################## end of script ##########################################
